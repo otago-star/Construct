@@ -3,8 +3,37 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Manulea Construction Ltd</title>
-  <link rel="stylesheet" href="styles.css">
+	<title>Manulea Construction Ltd</title>
+	<meta name="description" content="Manulea Construction Ltd — Family-owned construction business in Dunedin offering new builds, renovations, fencing, concrete work and driveways. Contact Sione Laiva'a Manulea Jnr.">
+	<meta name="keywords" content="Manulea Construction, Manulea Construction Ltd, Dunedin builder, renovations, new builds, fencing, concrete, driveways">
+	<meta name="robots" content="index,follow">
+	<link rel="canonical" href="https://example.com/landing.html">
+	<meta property="og:site_name" content="Manulea Construction Ltd">
+	<meta property="og:title" content="Manulea Construction Ltd — Dunedin Builders">
+	<meta property="og:description" content="Family-owned construction business delivering reliable workmanship across new builds, renovations and site work.">
+	<meta property="og:url" content="https://example.com/landing.html">
+	<meta property="og:type" content="website">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" href="styles.css">
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "LocalBusiness",
+		"name": "Manulea Construction Ltd",
+		"legalName": "Manulea Construction Ltd",
+		"url": "https://example.com/",
+		"logo": "https://example.com/images/logo/logo.png",
+		"email": "manuleacon@gmail.com",
+		"address": {
+			"@type": "PostalAddress",
+			"streetAddress": "104 Glen Road",
+			"addressLocality": "The Glen, Dunedin",
+			"postalCode": "9011",
+			"addressCountry": "NZ"
+		},
+		"description": "Family-owned construction business established by Laiva'a Manulea after 20 years' experience in the construction industry."
+	}
+	</script>
 </head>
 <body>
   <header class="site-header">
@@ -20,9 +49,16 @@
 		  <li class="projects-menu">
 			<a href="projects/index.html">Projects ▾</a>
 			<div class="projects-dropdown" aria-hidden="true">
-			  <h4>Featured</h4>
-			  <div class="thumb-list" data-project="project4" data-count="1"></div>
-			  <div class="thumb-list" data-project="project6" data-count="1" style="margin-top:.5rem"></div>
+			  <h4>Projects</h4>
+			  <div class="project-links">
+				<a href="projects/project1/index.html">Project Alpha</a>
+				<a href="projects/project2/index.html">Project Bravo</a>
+				<a href="projects/project3/index.html">Project Charlie</a>
+				<a href="projects/project4/index.html">Project Delta</a>
+				<a href="projects/project5/index.html">Project Echo</a>
+				<a href="projects/project6/index.html">Project Foxtrot</a>
+				<a href="projects/project7/index.html">Project Golf</a>
+			  </div>
 			</div>
 		  </li>
 		  <li><a href="#reviews">Reviews</a></li>
@@ -122,35 +158,6 @@
 	const toggle = document.querySelector('.nav-toggle');
 	const navLinks = document.querySelector('.nav-links');
 	toggle.addEventListener('click', () => navLinks.classList.toggle('open'));
-
-	// Populate projects dropdown thumbnails for specific projects
-	(function(){
-	  const lists = document.querySelectorAll('.projects-dropdown .thumb-list');
-	  lists.forEach(list=>{
-		const project = list.dataset.project; if(!project) return;
-		const count = 7; // update if different
-		for(let i=1;i<=count;i++){
-		  const img = document.createElement('img');
-		  const jpg = `images/projects/${project}/${i}.jpg`;
-		  const png = `images/projects/${project}/${i}.png`;
-		  img.src = jpg;
-		  img.loading = 'lazy';
-		  img.onerror = function(){ if(!this._triedPNG){ this._triedPNG = true; this.src = png; } };
-		  img.addEventListener('click', ()=> window.location = `projects/${project}/index.html`);
-		  list.appendChild(img);
-		}
-	  });
-
-	  // close dropdown on outside click for mobile
-	  document.addEventListener('click', e=>{
-		const menu = document.querySelector('.projects-menu');
-		if(!menu) return;
-		if(!menu.contains(e.target)){
-		  const dd = menu.querySelector('.projects-dropdown');
-		  if(dd) dd.style.display = '';
-		}
-	  });
-	})();
 
 	// Warmer/orange dynamic background based on local time
 	(function(){

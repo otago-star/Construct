@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Replace with your actual sitemap URL after you publish the site
+Sitemap: https://example.com/sitemap.xml
