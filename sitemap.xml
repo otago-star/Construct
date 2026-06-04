@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://example.com/</loc>
+    <loc>https://otago-star.github.io/Construct/</loc>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://example.com/index.html</loc>
+    <loc>https://otago-star.github.io/Construct/index.html</loc>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://example.com/landing.html</loc>
+    <loc>https://otago-star.github.io/Construct/landing.html</loc>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://example.com/projects/index.html</loc>
+    <loc>https://otago-star.github.io/Construct/projects/index.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://example.com/projects/project1/index.html</loc>
+    <loc>https://otago-star.github.io/Construct/projects/project1/index.html</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://example.com/projects/project2/index.html</loc>
+    <loc>https://otago-star.github.io/Construct/projects/project2/index.html</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://example.com/projects/project3/index.html</loc>
+    <loc>https://otago-star.github.io/Construct/projects/project3/index.html</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://example.com/projects/project4/index.html</loc>
+    <loc>https://otago-star.github.io/Construct/projects/project4/index.html</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://example.com/projects/project5/index.html</loc>
+    <loc>https://otago-star.github.io/Construct/projects/project5/index.html</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://example.com/projects/project6/index.html</loc>
+    <loc>https://otago-star.github.io/Construct/projects/project6/index.html</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://example.com/projects/project7/index.html</loc>
+    <loc>https://otago-star.github.io/Construct/projects/project7/index.html</loc>
     <priority>0.7</priority>
   </url>
 </urlset>
