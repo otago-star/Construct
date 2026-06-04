@@ -44,6 +44,18 @@ const SiteUtils = (function(){
 	  }
 	}
 
+	// If configured, prefer GitHub raw URLs (useful when site is opened from file:// or not served)
+	const cfg = (typeof window !== 'undefined' && window.SiteConfig) ? window.SiteConfig : null;
+	if(cfg && cfg.useGitHubRaw && cfg.githubRepo){
+	  const branch = cfg.githubBranch || 'main';
+	  return list.map(f => `https://raw.githubusercontent.com/${cfg.githubRepo}/${branch}/images/projects/${project}/${f}`);
+	}
+	// If page is within /projects/ path, prefer '../../images/projects/...' which resolves correctly
+	// both for file:// and when served from the site root.
+	const path = (typeof location !== 'undefined' ? location.pathname : '');
+	if(path.indexOf('/projects/') !== -1){
+	  return list.map(f => `../../images/projects/${project}/${f}`);
+	}
 	// Build paths: root-absolute for HTTP(s), relative for file:// based on page depth.
 	if(isHttp){
 	  return list.map(f => `/images/projects/${project}/${f}`);

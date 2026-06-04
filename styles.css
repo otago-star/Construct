@@ -111,7 +111,7 @@ a { color: var(--text); text-decoration: none; }
 a:hover { color: var(--accent); text-decoration: none; }
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
 .card{border:1px solid var(--muted-2);padding:1rem;border-radius:6px}
-.card img{max-width:100%;height:140px;width:100%;object-fit:cover}
+.card img{max-width:100%;height:auto;width:100%;object-fit:cover}
 .reviews blockquote{background:#f9f9f9;border-left:4px solid var(--accent);padding:1rem;margin:0 0 1rem}
 .site-footer{padding:1rem 0;text-align:center;color:var(--muted);border-top:1px solid var(--muted-2)}
 @media (max-width:900px){
@@ -180,7 +180,7 @@ body{padding-left:72px;padding-right:72px}
 
 /* Grid style for project2 */
 .gallery.grid .grid-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.75rem}
-.gallery.grid .grid-row img{width:100%;height:200px;object-fit:cover;border-radius:10px;cursor:pointer;display:block;transition:transform .18s}
+.gallery.grid .grid-row img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:10px;cursor:pointer;display:block;transition:transform .18s}
 .gallery.grid .grid-row img:hover{transform:scale(1.03)}
 
 /* Modal / lightbox used by grid */

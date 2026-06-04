@@ -47,6 +47,19 @@
 				im.loading = 'lazy';
 				row.appendChild(im);
 			  });
+			} else {
+			  const base = '../../images/projects/project4/';
+			  const fallbackCount = 4;
+			  for(let i=1;i<=fallbackCount;i++){
+				const im = document.createElement('img');
+				im.dataset.index = i-1;
+				im.loading = 'lazy';
+				const candidates = [base + i + '.jpg', base + i + '.jpeg', base + i + '.png', base + i + '.webp'];
+				im._tryIndex = 0;
+				im.src = candidates[0];
+				im.onerror = function(){ this._tryIndex++; if(this._tryIndex < candidates.length) this.src = candidates[this._tryIndex]; else { this.onerror=null; this.src='../../images/placeholder.svg'; } };
+				row.appendChild(im);
+			  }
 			}
 			const imgsEls = Array.from(row.querySelectorAll('img'));
 			const lightbox = document.querySelector('.lightbox');

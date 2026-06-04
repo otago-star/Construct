@@ -49,20 +49,16 @@
 			  });
 			} else {
 			  // fallback: look for numbered images up to data-count if present
-				const count = Number(gallery.dataset.count) || 0;
+			  const count = Number(gallery.dataset.count) || 0;
+			  const base = '../../images/projects/project1/';
 			  for(let i=1;i<=count;i++){
 				const im = document.createElement('img');
 				im.dataset.index = i-1;
 				im.loading = 'lazy';
-				const trySources = [
-				  `/images/projects/project1/${i}.jpg`,
-				  `/images/projects/project1/${i}.jpeg`,
-				  `/images/projects/project1/${i}.png`,
-				  `/images/projects/project1/${i}.webp`
-				];
-				im.src = trySources[0];
+				const candidates = [base + i + '.jpg', base + i + '.jpeg', base + i + '.png', base + i + '.webp'];
 				im._tryIndex = 0;
-				im.onerror = function(){ this._tryIndex = (this._tryIndex||0) + 1; if(this._tryIndex < trySources.length){ this.src = trySources[this._tryIndex]; } else { this.onerror=null; this.src='/images/placeholder.svg'; } };
+				im.src = candidates[0];
+				im.onerror = function(){ this._tryIndex++; if(this._tryIndex < candidates.length) this.src = candidates[this._tryIndex]; else { this.onerror=null; this.src='../../images/placeholder.svg'; } };
 				row.appendChild(im);
 			  }
 			}
