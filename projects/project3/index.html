@@ -42,9 +42,20 @@
 			if(imgs.length){
 			  imgs.forEach((src,i)=>{
 				const im = document.createElement('img');
-				im.src = src;
 				im.dataset.index = i;
 				im.loading = 'lazy';
+				// absolute fallback: if a relative src fails to load, try resolving it from the site origin
+				im.onerror = function(){
+				  this.onerror = null;
+				  try{
+					// if src is already absolute (protocol or leading slash), don't modify
+					if(/^(?:[a-z]+:)?\/\//i.test(src) || src.charAt(0) === '/'){ return; }
+					this.src = window.location.origin.replace(/\/$/,'') + '/' + src.replace(/^[./]+/,'');
+				  }catch(e){
+					// noop
+				  }
+				};
+				im.src = src;
 				row.appendChild(im);
 			  });
 			}

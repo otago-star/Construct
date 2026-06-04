@@ -49,15 +49,20 @@
 			  });
 			} else {
 			  // fallback: look for numbered images up to data-count if present
-			  const count = Number(gallery.dataset.count) || 0;
+				const count = Number(gallery.dataset.count) || 0;
 			  for(let i=1;i<=count;i++){
 				const im = document.createElement('img');
-				const jpg = `../../images/projects/project1/${i}.jpg`;
-				const png = `../../images/projects/project1/${i}.png`;
-				im.src = jpg;
 				im.dataset.index = i-1;
 				im.loading = 'lazy';
-				im.onerror = function(){ if(!this._triedPNG){ this._triedPNG = true; this.src = png; } else { this.onerror=null; this.src='../../images/placeholder.svg'; } };
+				const trySources = [
+				  `/images/projects/project1/${i}.jpg`,
+				  `/images/projects/project1/${i}.jpeg`,
+				  `/images/projects/project1/${i}.png`,
+				  `/images/projects/project1/${i}.webp`
+				];
+				im.src = trySources[0];
+				im._tryIndex = 0;
+				im.onerror = function(){ this._tryIndex = (this._tryIndex||0) + 1; if(this._tryIndex < trySources.length){ this.src = trySources[this._tryIndex]; } else { this.onerror=null; this.src='/images/placeholder.svg'; } };
 				row.appendChild(im);
 			  }
 			}

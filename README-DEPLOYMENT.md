@@ -11,7 +11,7 @@ Steps to deploy the serverless proxy and enable site review submissions:
    - REVIEW_CLIENT_TOKEN = <a short secret that the client will send; keep this secret in Netlify>  
 
 3) After deploy, set SiteConfig in assets/js/site-config.js to the deployed function URL and the client token:
-   - repoDispatchEndpoint: https://<your-site>.netlify.app/.netlify/functions/submit-review
+   - repoDispatchEndpoint: https://loquacious-marshmallow-b403c4.netlify.app/.netlify/functions/submit-review
    - reviewClientToken: <the same REVIEW_CLIENT_TOKEN value>
 
 4) How it works
