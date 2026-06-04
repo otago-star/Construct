@@ -4,9 +4,18 @@ const SiteUtils = (function(){
   async function loadManifest(){
 	if(manifest) return manifest;
 	try{
-	  const res = await fetch('/projects/data/projects.json', {cache: 'no-store'});
-	  if(!res.ok) throw new Error('Not found');
-	  manifest = await res.json();
+	  // try a few paths to be robust when pages are served from subfolders or root
+	  const candidates = ['/projects/data/projects.json','projects/data/projects.json','./projects/data/projects.json'];
+	  let data = null;
+	  for(const p of candidates){
+		try{
+		  const res = await fetch(p, {cache: 'no-store'});
+		  if(!res.ok) continue;
+		  data = await res.json();
+		  break;
+		}catch(e){ continue; }
+	  }
+	  manifest = data || {};
 	}catch(e){
 	  // fallback to empty
 	  manifest = {};
@@ -18,7 +27,8 @@ const SiteUtils = (function(){
 	const m = await loadManifest();
 	const list = m[project] || [];
 	// return absolute relative paths under images/projects/project/
-	return list.map(f => `images/projects/${project}/${f}`);
+	// Use root-absolute paths so pages in subfolders resolve correctly
+	return list.map(f => `/${'images'}/projects/${project}/${f}`);
   }
 
   return { loadManifest, getProjectImages };

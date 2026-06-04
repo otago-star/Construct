@@ -55,7 +55,12 @@
 
   function loadLocal(){
 	const reviews = JSON.parse(localStorage.getItem('reviews')||'[]');
-	list.innerHTML = reviews.map(r=>`<blockquote class="card">${r}</blockquote>`).join('');
+	list.innerHTML = reviews.map(r=>{
+	  if(typeof r === 'string'){
+		return `<blockquote class="card"><span class="author">Guest</span><div>${r}</div></blockquote>`;
+	  }
+	  return `<blockquote class="card"><span class="author">${r.author||'Guest'}</span><small>${r.timestamp||''}</small><div>${r.review||''}</div></blockquote>`;
+	}).join('');
   }
 
 	async function submitReview(text){
