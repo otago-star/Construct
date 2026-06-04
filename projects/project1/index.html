@@ -41,10 +41,16 @@
 			const imgs = window.SiteUtils ? await SiteUtils.getProjectImages('project1') : [];
 			if(imgs.length){
 			  imgs.forEach((src,i)=>{
-				const im = document.createElement('img');
-				im.src = src;
-				im.dataset.index = i;
-				im.loading = 'lazy';
+				let im;
+				if(window.SiteUtils && typeof SiteUtils.createImageElement === 'function'){
+				  // pass the full src so createImageElement will prefer it directly
+				  im = SiteUtils.createImageElement('project1', src, i);
+				} else {
+				  im = document.createElement('img');
+				  im.src = src;
+				  im.dataset.index = i;
+				  im.loading = 'lazy';
+				}
 				row.appendChild(im);
 			  });
 			} else {
