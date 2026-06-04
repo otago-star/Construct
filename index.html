@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Manulea Construction Ltd</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+	.start-full{height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;flex-direction:column;padding:2rem}
+	.start-full h1{font-size:2.25rem;margin:.5rem 0;color:var(--text)}
+	.start-full p{color:var(--muted);margin-bottom:1.25rem}
+	.enter-btn{background:var(--accent);color:#fff;padding:.75rem 1.25rem;border-radius:10px;font-weight:700;text-decoration:none}
+	.logo-large{max-width:420px;width:55%;height:auto;margin-bottom:1rem;border-radius:8px}
+	@media(max-width:520px){ .start-full h1{font-size:1.5rem} .logo-large{width:70%} }
+  </style>
+</head>
+<body>
+  <div class="start-full">
+	<img src="images/logo/logo.svg" alt="Logo" class="logo-large" onerror="this.onerror=null;this.src='images/logo/logo.png'">
+	<h1>Manulea Construction Ltd</h1>
+	<p>Owned by Sione Laiva'a Manulea. Website created by Sione Laiva'a Manulea Jnr.</p>
+	<p>Quality building and reliable tradesmanship. Click to enter the site.</p>
+	<a id="enterSite" class="enter-btn" href="landing.html">Enter Site</a>
+  </div>
+  <div id="fadeOverlay" class="fade-overlay"></div>
+  <script>
+	document.getElementById('enterSite').addEventListener('click', function(e){
+	  e.preventDefault();
+	  const overlay = document.getElementById('fadeOverlay');
+	  overlay.classList.add('show');
+	  setTimeout(()=> location.href = this.getAttribute('href'), 450);
+	});
+  </script>
+</body>
+</html>

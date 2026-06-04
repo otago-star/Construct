@@ -1,17 +1,17 @@
 @import url('https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css');
 /* Basic responsive site styles */
 :root{
-	/* All red theme (neon accents) */
-  --page-bg: linear-gradient(180deg,#fff5f5,#ffecec);
-  --text:#2b0000; /* dark red text */
-  --muted:#7a0000; /* muted red */
-  --accent:#ff0033; /* bright red accent */
-	--neon-rgb: 255,0,51;
+	/* Warm construction theme */
+  --page-bg: linear-gradient(180deg,#f7f1e8,#efe0d0);
+  --text:#3b2e24; /* dark warm text */
+  --muted:#6f5f4f; /* muted warm gray */
+  --accent:#d35400; /* construction orange accent */
+	--neon-rgb: 211,84,0;
 	--border: rgba(var(--neon-rgb),0.12);
-  --muted-2: rgba(var(--neon-rgb),0.06);
+  --muted-2: rgba(var(--neon-rgb),0.08);
   --card-bg: #ffffff;
-	--glass: rgba(255,240,240,0.85);
-  --shadow: 0 8px 28px rgba(203,9,21,0.12);
+	--glass: rgba(250,244,236,0.88);
+  --shadow: 0 10px 30px rgba(180,120,60,0.12);
   --radius: 12px;
   /* Gallery sizing */
   --gallery-main-height: 420px;
@@ -26,7 +26,7 @@
 .projects-menu:hover .projects-dropdown{display:block}
 .projects-dropdown h4{margin:.25rem 0 .5rem;font-size:.95rem}
 .projects-dropdown .thumb-list{display:flex;gap:.4rem;flex-wrap:wrap}
-.projects-dropdown .thumb-list img{width:72px;height:48px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid transparent}
+.projects-dropdown .thumb-list img{width:72px;height:48px;object-fit:contain;background:#f5f1ef;border-radius:6px;cursor:pointer;border:2px solid transparent}
 
 /* card thumbnails below main image */
 .card-thumbs{display:flex;gap:.5rem;margin-top:.6rem}
@@ -52,16 +52,16 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;
 .site-header .nav-links a{color: rgba(var(--highlight-yellow),1);font-weight:700}
 /* Neon yellow highlight for nav text, green on hover */
 :root{
-  --highlight-yellow: 255,238,88;
-  --hover-green: 0,255,136;
+  --highlight-yellow: 255,193,92;
+  --hover-green: 183,93,0;
 }
 .site-header .nav-links a{
   color: rgba(var(--highlight-yellow),1);
-  text-shadow: 0 0 6px rgba(var(--highlight-yellow),0.9), 0 0 18px rgba(var(--highlight-yellow),0.4);
+  text-shadow: 0 0 6px rgba(var(--highlight-yellow),0.9), 0 0 18px rgba(var(--highlight-yellow),0.3);
 }
 .site-header .nav-links a:hover{
   color: rgba(var(--hover-green),1);
-  text-shadow: 0 0 8px rgba(var(--hover-green),0.95), 0 0 22px rgba(var(--hover-green),0.45);
+  text-shadow: 0 0 8px rgba(var(--hover-green),0.9), 0 0 20px rgba(var(--hover-green),0.25);
 }
 
 /* Reviews alignment fixes */

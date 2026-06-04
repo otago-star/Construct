@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Project Two</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../landing.html">
+        <img src="../../images/logo/logo.svg" alt="Logo" class="logo" onerror="this.onerror=null;this.src='../../images/logo/logo.png'">
+        <span class="brand-name">OtagoStar Construction</span>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="projects">
+      <div class="container">
+        <h1>Project Two</h1>
+        <p>Details about Project Two.</p>
+
+        <div class="gallery grid" data-project="project2" data-count="6">
+          <div class="grid-row"></div>
+        </div>
+
+        <div class="lightbox" aria-hidden="true">
+          <button class="close" aria-label="Close">✖</button>
+          <button class="prev" aria-label="Previous">◀</button>
+          <img src="" alt="">
+          <button class="next" aria-label="Next">▶</button>
+        </div>
+
+        <script>
+          (async function(){
+            const gallery = document.querySelector('.gallery.grid[data-project]');
+            if(!gallery) return;
+            const project = gallery.dataset.project;
+            const count = Number(gallery.dataset.count) || 0;
+            const row = gallery.querySelector('.grid-row');
+            function addImage(src, index){
+              const im = document.createElement('img');
+              im.src = src;
+              im.dataset.index = index;
+              im.loading = 'lazy';
+              im.onerror = function(){
+                if(!this._triedPNG){ this._triedPNG = true; this.src = src.replace('.jpg', '.png'); }
+              };
+              row.appendChild(im);
+            }
+            function fillFallback(){
+              if(count <= 0){
+                row.innerHTML = '<p>No images available for this project yet.</p>';
+                return;
+              }
+              for(let i=1;i<=count;i++){
+                addImage(`../../images/projects/${project}/${i}.jpg`, i-1);
+              }
+            }
+            const imgs = window.SiteUtils && typeof SiteUtils.getProjectImages === 'function'
+              ? await SiteUtils.getProjectImages(project)
+              : [];
+            if(Array.isArray(imgs) && imgs.length){
+              imgs.forEach((src,i)=>{
+                const im = window.SiteUtils && typeof SiteUtils.createImageElement === 'function'
+                  ? SiteUtils.createImageElement(project, src, i)
+                  : (()=>{ const e=document.createElement('img'); e.src=src; e.dataset.index=i; e.loading='lazy'; return e; })();
+                row.appendChild(im);
+              });
+            } else {
+              fillFallback();
+            }
+            const imgsEls = Array.from(row.querySelectorAll('img'));
+            const lightbox = document.querySelector('.lightbox');
+            const lbImg = lightbox.querySelector('img');
+            let idx = 0;
+            function open(i){ idx=i; lbImg.src=imgsEls[idx].src; lightbox.classList.add('open'); lightbox.setAttribute('aria-hidden','false'); }
+            function close(){ lightbox.classList.remove('open'); lightbox.setAttribute('aria-hidden','true'); }
+            function nav(delta){ idx = (idx + delta + imgsEls.length) % imgsEls.length; lbImg.src=imgsEls[idx].src; }
+            imgsEls.forEach((im,i)=>im.addEventListener('click',()=>open(i)));
+            lightbox.querySelector('.close').addEventListener('click',close);
+            lightbox.querySelector('.prev').addEventListener('click',()=>nav(-1));
+            lightbox.querySelector('.next').addEventListener('click',()=>nav(1));
+            lightbox.addEventListener('click',e=>{ if(e.target===lightbox) close(); });
+            document.addEventListener('keydown',e=>{ if(lightbox.classList.contains('open')){ if(e.key==='Escape') close(); if(e.key==='ArrowLeft') nav(-1); if(e.key==='ArrowRight') nav(1); } });
+          })();
+        </script>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
