@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Sione Laiva'a Manulea</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="fade-overlay" id="fadeOverlay"></div>
+	<header class="site-header">
+	<div class="container nav">
+		<a class="brand" href="#home">
+		<img src="images/logo/logo.svg" alt="Logo" class="logo" onerror="this.onerror=null;this.src='images/logo/logo.png'">
+		<div class="brand-text">
+		  <div class="company">Manulea Construction Ltd</div>
+		  <div class="person">Sione Laiva'a Manulea Jnr</div>
+		</div>
+	  </a>
+		<nav>
+		<button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+		<ul class="nav-links">
+		  <li><a href="projects/index.html">View All Projects</a></li>
+		  <li><a href="contact.html">Message</a></li>
+		  <li><a href="reviews.html">Reviews</a></li>
+		</ul>
+	  </nav>
+	</div>
+  </header>
+
+  <!-- Decorative side borders (left and right) repeated vertically -->
+  <div class="side-border left" aria-hidden="true"></div>
+  <div class="side-border right" aria-hidden="true"></div>
+
+  <main>
+	<section id="home" class="hero">
+	  <div class="container">
+		<h1>Welcome</h1>
+		<p>This is the landing / homepage. Replace with your father's headline and intro.</p>
+		<p><a class="btn" href="projects/index.html">View Projects</a></p>
+	  </div>
+	</section>
+
+	<!-- Projects section removed as requested. Use View All Projects in the nav or the "View Projects" button to browse projects. -->
+
+	<section id="reviews" class="reviews">
+	  <div class="container">
+		<h2>Reviews</h2>
+		<div class="review-list">
+		  <blockquote>"Fantastic job — highly recommend." <cite>- Customer A</cite></blockquote>
+		  <blockquote>"Punctual, professional, great communication." <cite>- Customer B</cite></blockquote>
+		</div>
+	  </div>
+	</section>
+
+	<!-- About section removed from landing page to focus on hero and reviews. Contact is still available via the Message link in the header. -->
+  </main>
+
+	<footer class="site-footer">
+	<div class="container">
+	  <p>&copy; <span id="year"></span> Sione Laiva'a Manulea</p>
+	</div>
+  </footer>
+
+  <script>
+	// Set current year
+	document.getElementById('year').textContent = new Date().getFullYear();
+
+	// Mobile nav toggle
+	const toggle = document.querySelector('.nav-toggle');
+	const navLinks = document.querySelector('.nav-links');
+	toggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+
+	// Build main page's project1 gallery thumbs dynamically using SiteUtils manifest if available
+	(async function(){
+	  const gallery = document.querySelector('.gallery.slider[data-project="project1"]');
+	  if(!gallery) return;
+	  // attempt to use generated manifest
+	  const imgs = window.SiteUtils ? await SiteUtils.getProjectImages('project1') : [];
+	  const thumbsEl = gallery.querySelector('.thumbs');
+	  if(imgs.length){
+		imgs.forEach((src,i)=>{
+		  const img = document.createElement('img');
+		  img.src = src;
+		  img.dataset.index = i;
+		  img.loading = 'lazy';
+		  if(i===0) img.classList.add('active');
+		  img.classList.add('has-note');
+		  img.title = 'Hover for note';
+		  thumbsEl.appendChild(img);
+		});
+	  } else {
+		// fallback to data-count method
+		const count = Number(gallery.dataset.count) || 0;
+		for(let i=1;i<=count;i++){
+		  const img = document.createElement('img');
+		  const jpg = `images/projects/project1/${i}.jpg`;
+		  const png = `images/projects/project1/${i}.png`;
+		  img.src = jpg;
+		  img.dataset.index = i-1;
+		  img.loading = 'lazy';
+		  img.onerror = function(){ if(!this._triedPNG){ this._triedPNG = true; this.src = png; } else { this.onerror=null; this.src='images/placeholder.svg'; } };
+		  if(i===1) img.classList.add('active');
+		  img.classList.add('has-note');
+		  img.title = 'Hover for note';
+		  thumbsEl.appendChild(img);
+		}
+	  }
+	  const thumbs = Array.from(thumbsEl.querySelectorAll('img'));
+	  const mainImg = gallery.querySelector('.main img');
+	  let idx = 0;
+	  function setIndex(i){
+		idx = (i + thumbs.length) % thumbs.length;
+		mainImg.src = thumbs[idx].src;
+		thumbs.forEach(t=>t.classList.toggle('active', Number(t.dataset.index)===idx));
+	  }
+	  if(thumbs.length <= 1){
+		gallery.querySelector('.nav-btn.left').style.display = 'none';
+		gallery.querySelector('.nav-btn.right').style.display = 'none';
+		thumbsEl.style.display = 'none';
+	  } else {
+		gallery.querySelector('.nav-btn.left').addEventListener('click',()=>setIndex(idx-1));
+		gallery.querySelector('.nav-btn.right').addEventListener('click',()=>setIndex(idx+1));
+		thumbs.forEach(t=>t.addEventListener('click',()=>setIndex(Number(t.dataset.index))));
+	  }
+	})();
+
+	// Warmer/orange dynamic background based on local time
+	(function(){
+	  const hour = new Date().getHours();
+	  let bg;
+	  if(hour >= 6 && hour < 12) {
+		// warm morning
+		bg = 'linear-gradient(180deg,#fff1e6,#ffd5b3)';
+	  } else if(hour >= 12 && hour < 18) {
+		// bright orange afternoon
+		bg = 'linear-gradient(180deg,#ff9a00,#ff5a00)';
+	  } else {
+		// deeper orange evening/night
+		bg = 'linear-gradient(180deg,#ff7a5a,#ff3b1a)';
+	  }
+	  document.documentElement.style.setProperty('--page-bg', bg);
+	})();
+  </script>
+  <script src="/assets/js/site-utils.js"></script>
+</body>
+</html>

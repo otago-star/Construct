@@ -1,0 +1,54 @@
+name: Accept Reviews
+
+on:
+  repository_dispatch:
+	types: [submit-review]
+
+jobs:
+  accept-review:
+	runs-on: ubuntu-latest
+	permissions:
+	  contents: write
+	steps:
+	  - name: Checkout
+		uses: actions/checkout@v4
+
+	  - name: Validate payload
+		id: validate
+		run: |
+		  echo "Reading event payload"
+		  PAYLOAD_FILE=$GITHUB_EVENT_PATH
+		  echo "Payload file: $PAYLOAD_FILE"
+		  TOKEN_EXPECTED="${{ secrets.REVIEW_AUTH_TOKEN }}"
+		  TOKEN_RECEIVED=$(jq -r .client_payload.token "$PAYLOAD_FILE")
+		  if [ "$TOKEN_RECEIVED" != "$TOKEN_EXPECTED" ]; then
+			echo "Invalid token" >&2
+			exit 2
+		  fi
+		  echo "Token OK"
+
+	  - name: Load existing reviews
+		id: load
+		run: |
+		  mkdir -p projects/data
+		  if [ -f projects/data/reviews.json ]; then cat projects/data/reviews.json > /tmp/reviews.json; else echo '[]' > /tmp/reviews.json; fi
+
+	  - name: Append review
+		id: append
+		run: |
+		  PAYLOAD_FILE=$GITHUB_EVENT_PATH
+		  REVIEW_TEXT=$(jq -r .client_payload.review_text "$PAYLOAD_FILE")
+		  AUTHOR=$(jq -r .client_payload.author "$PAYLOAD_FILE")
+		  TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+		  NEW_ENTRY=$(jq -n --arg t "$TIMESTAMP" --arg a "$AUTHOR" --arg r "$REVIEW_TEXT" '{timestamp:$t,author:$a,review:$r}')
+		  # Prepend
+		  jq --argjson e "$NEW_ENTRY" '[ $e ] + (if (input | length) == 0 then [] else input end)' /tmp/reviews.json > /tmp/reviews_new.json <<<'$(cat /tmp/reviews.json)'
+
+	  - name: Move new reviews file
+		run: |
+		  mv /tmp/reviews_new.json projects/data/reviews.json
+		  git config user.name "github-actions[bot]"
+		  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+		  git add projects/data/reviews.json
+		  git commit -m "Add review from repository_dispatch"
+		  git push

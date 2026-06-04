@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Message</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+	<div class="container nav">
+	  <a class="brand" href="landing.html">
+		<img src="images/logo/logo.svg" alt="Logo" class="logo" onerror="this.onerror=null;this.src='images/logo/logo.png'">
+	  </a>
+	  <nav>
+		<ul class="nav-links">
+		  <li><a href="landing.html">Home</a></li>
+		  <li><a href="projects/index.html">Projects</a></li>
+		  <li><a href="reviews.html">Reviews</a></li>
+		</ul>
+	  </nav>
+	</div>
+  </header>
+
+	<main>
+	<div class="container">
+	  <h1>Message Sione Laiva'a Manulea</h1>
+	  <p>Send a message. You can send via your email client or (if configured) via a form endpoint.</p>
+	  <div>
+		<textarea id="msgInput" rows="4" placeholder="Type your message..."></textarea>
+		<div style="margin-top:.5rem"><button id="sendBtn">Send</button> <button id="mailtoBtn">Open Email Client</button></div>
+	  </div>
+	  <h2>Messages (local copy)</h2>
+	  <div id="messages"></div>
+	</div>
+  </main>
+
+  <footer class="site-footer">
+	<div class="container">
+	  <p>&copy; <span id="year"></span> Sione Laiva'a Manulea</p>
+	</div>
+  </footer>
+
+	<script>
+  const input = document.getElementById('msgInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const mailtoBtn = document.getElementById('mailtoBtn');
+  const messagesDiv = document.getElementById('messages');
+  const EMAIL = 'manuleacon@gmail.com';
+
+  function load(){
+	const msgs = JSON.parse(localStorage.getItem('messages')||'[]');
+	messagesDiv.innerHTML = msgs.map(m=>`<div class="card">${m}</div>`).join('');
+  }
+
+  // Send via configured form endpoint if provided in SiteConfig.formEndpoint
+  async function sendMessage(value){
+	// Save local copy
+	const msgs = JSON.parse(localStorage.getItem('messages')||'[]'); msgs.unshift(value); localStorage.setItem('messages', JSON.stringify(msgs)); load();
+	// If Formspree (or another) endpoint is provided, POST to it
+	try{
+	  if(window.SiteConfig && window.SiteConfig.formEndpoint){
+		await fetch(window.SiteConfig.formEndpoint, {
+		  method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({email: EMAIL, message: value})
+		});
+	  }
+	}catch(e){ console.warn('form submit failed', e); }
+  }
+
+  sendBtn.addEventListener('click', ()=>{
+	const v = input.value.trim(); if(!v) return; sendMessage(v); input.value='';
+  });
+
+  mailtoBtn.addEventListener('click', ()=>{
+	const body = encodeURIComponent(input.value.trim() || '');
+	const subject = encodeURIComponent('Message for Sione Laiva\'a Manulea');
+	// open mail client with prefilled to=manuleacon@gmail.com
+	location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+  });
+
+  load();
+  </script>
+</body>
+</html>

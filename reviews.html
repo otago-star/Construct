@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Reviews</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+	<div class="container nav">
+	  <a class="brand" href="landing.html">
+		<img src="images/logo/logo.svg" alt="Logo" class="logo" onerror="this.onerror=null;this.src='images/logo/logo.png'">
+	  </a>
+	  <nav>
+		<ul class="nav-links">
+		  <li><a href="landing.html">Home</a></li>
+		  <li><a href="projects/index.html">Projects</a></li>
+		  <li><a href="contact.html">Message</a></li>
+		</ul>
+	  </nav>
+	</div>
+  </header>
+
+  <main>
+	<div class="container">
+		<h1>Reviews for Sione Laiva'a Manulea</h1>
+	  <p>Leave a review and see previous reviews (stored locally).</p>
+	  <div>
+		<input id="reviewInput" placeholder="Write a short review...">
+		<button id="addReview">Add Review</button>
+	  </div>
+	  <div id="reviewsList"></div>
+	</div>
+  </main>
+
+	<script>
+  const reviewInput = document.getElementById('reviewInput');
+  const addReview = document.getElementById('addReview');
+  const list = document.getElementById('reviewsList');
+
+  async function loadRemote(){
+	try{
+	  const res = await fetch('projects/data/reviews.json', {cache:'no-store'});
+	  if(!res.ok) throw new Error('no remote');
+	  const arr = await res.json();
+	  if(Array.isArray(arr) && arr.length>0){
+		list.innerHTML = arr.map(r=>`<blockquote class="card"><strong>${r.author||'Guest'}</strong> <small>${r.timestamp||''}</small><div>${r.review}</div></blockquote>`).join('');
+		return true;
+	  }
+	}catch(e){ console.warn('remote reviews not available', e); }
+	return false;
+  }
+
+  function loadLocal(){
+	const reviews = JSON.parse(localStorage.getItem('reviews')||'[]');
+	list.innerHTML = reviews.map(r=>`<blockquote class="card">${r}</blockquote>`).join('');
+  }
+
+  async function submitReview(text){
+	// first save local copy
+	const reviews = JSON.parse(localStorage.getItem('reviews')||'[]'); reviews.unshift(text); localStorage.setItem('reviews', JSON.stringify(reviews));
+	// try to dispatch to GitHub Actions via repository_dispatch
+	try{
+	  // require owner to provide an auth token that matches workflow secret; ask user for token
+	  const token = window.SiteConfig && window.SiteConfig.reviewClientToken ? window.SiteConfig.reviewClientToken : prompt('Enter client token for submitting reviews (optional)');
+	  const payload = { event_type: 'submit-review', client_payload: { token: token || '', review_text: text, author: 'Guest' } };
+	  // send to GitHub API - repository_dispatch requires authentication; user must host a small proxy or use a GitHub token here
+	  // We will attempt to POST to the repository_dispatch endpoint relative to current origin if configured
+	  if(window.SiteConfig && window.SiteConfig.repoDispatchEndpoint){
+		await fetch(window.SiteConfig.repoDispatchEndpoint, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+	  } else {
+		console.warn('repoDispatch endpoint not configured; skipping remote submit');
+	  }
+	}catch(e){ console.warn('submit failed', e); }
+  }
+
+  addReview.addEventListener('click', ()=>{
+	const v = reviewInput.value.trim(); if(!v) return; submitReview(v); reviewInput.value=''; loadLocal();
+  });
+
+  // initial load: try remote then fallback to local
+  (async function(){ const ok = await loadRemote(); if(!ok) loadLocal(); })();
+  </script>
+  <footer class="site-footer">
+	<div class="container">
+	  <p>&copy; <span id="year"></span> Sione Laiva'a Manulea</p>
+	</div>
+  </footer>
+</body>
+</html>
