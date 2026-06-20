@@ -113,7 +113,7 @@ a:hover { color: var(--accent); text-decoration: none; }
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
 .card{border:1px solid var(--muted-2);padding:1rem;border-radius:6px}
 .card img{max-width:100%;height:140px;width:100%;object-fit:cover}
-.reviews blockquote{background:#f9f9f9;border-left:4px solid var(--accent);padding:1rem;margin:0 0 1rem}
+.reviews blockquote{background:#5d4a4a;border-left:4px solid var(--accent);padding:1rem;margin:0 0 1rem}
 .site-footer{padding:1rem 0;text-align:center;color:var(--muted);border-top:1px solid var(--muted-2)}
 @media (max-width:900px){
   /* Mobile: make nav expand inline, pushing content down instead of overlaying */
